@@ -5,6 +5,7 @@ import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
+import ThemeEffects from '@/components/ThemeEffects.astro';
 import Analytics from '@/components/Analytics.astro';
 import Crisp from '@/components/Crisp.astro';
 import LocaleBanner from '@/components/react/LocaleBanner';
@@ -159,7 +160,8 @@ const alternateUrls = locales.map((l) => ({
       currentPath={Astro.url.pathname}
       allMessages={allBannerMessages}
     />
-    <div class="flex min-h-screen flex-col">
+    <ThemeEffects />
+    <div class="flex min-h-screen flex-col relative z-[1]">
       <Navbar locale={locale} />
       <main class="flex-1">
         <slot />

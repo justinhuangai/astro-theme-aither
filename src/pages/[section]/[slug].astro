@@ -13,92 +13,97 @@ import { render } from 'astro:content';
 import { formatDate, wordCount, readingTime } from '@/lib/formatter';
 import { siteConfig } from '@/config/site';
 import { getMessages } from '@/i18n';
-import { getPostsByLocale, getSlug } from '@/lib/posts';
+import { getContentByLocale, getSlug } from '@/lib/posts';
 
 export async function getStaticPaths() {
-  const posts = await getPostsByLocale('en');
-  return posts.map((post, i) => ({
-    params: { slug: getSlug(post.id) },
-    props: {
-      post,
-      prevPost: i < posts.length - 1 ? posts[i + 1] : null,
-      nextPost: i > 0 ? posts[i - 1] : null,
-    },
-  }));
+  const paths = [];
+  for (const s of siteConfig.sections) {
+    const entries = await getContentByLocale(s.id, 'en');
+    entries.forEach((entry: any, i: number) => {
+      paths.push({
+        params: { section: s.id, slug: getSlug(entry.id) },
+        props: {
+          section: s,
+          entry,
+          prevEntry: i < entries.length - 1 ? entries[i + 1] : null,
+          nextEntry: i > 0 ? entries[i - 1] : null,
+        },
+      });
+    });
+  }
+  return paths;
 }
 
-const { post, prevPost, nextPost } = Astro.props;
-const { Content, headings } = await render(post);
+const { section, entry, prevEntry, nextEntry } = Astro.props;
+const { Content, headings } = await render(entry);
 const m = getMessages('en');
-const postUrl = `${siteConfig.url}/posts/${getSlug(post.id)}/`;
+const slug = getSlug(entry.id);
+const entryUrl = `${siteConfig.url}/${section.id}/${slug}/`;
+const sectionTitle = m.nav[section.labelKey] ?? section.labelKey;
+
 const articleJsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: post.data.title,
-    description: post.data.description,
-    datePublished: post.data.date.toISOString(),
+    headline: entry.data.title,
+    description: entry.data.description,
+    datePublished: entry.data.date.toISOString(),
     author: { '@type': 'Person', name: siteConfig.author.name },
     publisher: { '@type': 'Organization', name: siteConfig.name },
-    url: postUrl,
+    url: entryUrl,
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: siteConfig.name, item: siteConfig.url },
-      { '@type': 'ListItem', position: 2, name: m.nav.blog, item: siteConfig.url },
-      { '@type': 'ListItem', position: 3, name: post.data.title, item: postUrl },
+      { '@type': 'ListItem', position: 2, name: sectionTitle, item: `${siteConfig.url}/${section.id}/` },
+      { '@type': 'ListItem', position: 3, name: entry.data.title, item: entryUrl },
     ],
   },
-];
-const slug = getSlug(post.id);
-const alternateFormats = [
-  { type: 'text/markdown', href: `/posts/${slug}.md`, title: `${post.data.title} (Markdown)` },
 ];
 ---
 
 <Layout
-  title={`${post.data.title} | ${siteConfig.name}`}
-  description={post.data.description}
-  image={post.data.image ?? `/og/${getSlug(post.id)}.png`}
+  title={`${entry.data.title} | ${siteConfig.name}`}
+  description={entry.data.description}
+  image={entry.data.image ?? `/og/${slug}.png`}
   jsonLd={articleJsonLd}
   article={{
-    publishedTime: post.data.date.toISOString(),
+    publishedTime: entry.data.date.toISOString(),
     author: siteConfig.author.name,
-    tags: post.data.tags,
+    tags: entry.data.tags,
   }}
-  alternateFormats={alternateFormats}
 >
   <Container class="py-16 px-4">
     <div class="xl:grid xl:grid-cols-[1fr_220px] xl:gap-8">
       <article>
         <div class="mb-4 flex flex-wrap items-center gap-2">
-          <CategoryPill category={post.data.category} locale="en" />
-          {post.data.tags && post.data.tags.map((tag: string) => <Tag tag={tag} locale="en" />)}
+          <CategoryPill category={entry.data.category} locale="en" />
+          {entry.data.tags && entry.data.tags.map((tag: string) => <Tag tag={tag} locale="en" />)}
         </div>
 
-        <h1 class="text-xl sm:text-2xl md:text-[31px] font-semibold mb-4 leading-[1.4] text-[var(--color-link)] break-words">{post.data.title}</h1>
+        <h1 class="text-xl sm:text-2xl md:text-[31px] font-semibold mb-4 leading-[1.4] text-[var(--color-link)] break-words">{entry.data.title}</h1>
 
-        <div class="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground/60 text-xs font-mono" title={m.blog.readingTimeTooltip.replace('{words}', String(wordCount(post.body ?? ''))).replace('{minutes}', String(readingTime(post.body ?? '')))}>
-          <span>{formatDate(post.data.date)}</span>
-          <span>·</span>
-          <span>{wordCount(post.body ?? '')} {m.blog.wordCount}</span>
-          <span>·</span>
-          <span>{readingTime(post.body ?? '')} {m.blog.minRead}</span>
+        <div class="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground/60 text-xs font-mono" title={m.blog.readingTimeTooltip.replace('{words}', String(wordCount(entry.body ?? ''))).replace('{minutes}', String(readingTime(entry.body ?? '')))}>
+          <span>{formatDate(entry.data.date)}</span>
+          <span>&middot;</span>
+          <span>{wordCount(entry.body ?? '')} {m.blog.wordCount}</span>
+          <span>&middot;</span>
+          <span>{readingTime(entry.body ?? '')} {m.blog.minRead}</span>
         </div>
 
         {
-          post.data.description && (
+          entry.data.description && (
             <p class="mt-4 text-muted-foreground text-lg leading-relaxed">
-              {post.data.description}
+              {entry.data.description}
             </p>
           )
         }
 
-        {post.data.image && (
+        {entry.data.image && (
           <div class="mt-6">
-            <BlogCoverImage image={post.data.image} alt={post.data.title} />
+            <BlogCoverImage image={entry.data.image} alt={entry.data.title} />
           </div>
         )}
 
@@ -115,28 +120,28 @@ const alternateFormats = [
         </div>
 
         <nav class="mt-6 flex flex-col sm:flex-row items-stretch justify-between gap-4">
-          {prevPost ? (
+          {prevEntry ? (
             <a
-              href={`/posts/${getSlug(prevPost.id)}/`}
+              href={`/${section.id}/${getSlug(prevEntry.id)}/`}
               class="group flex flex-col items-start text-sm hover:text-foreground sm:max-w-[45%] py-2"
             >
               <span class="inline-flex items-center gap-1 text-muted-foreground group-hover:text-foreground">
                 <ArrowLeft class="size-3.5" />
                 {m.blog.prevPost}
               </span>
-              <span class="mt-1 text-[var(--color-link)] group-hover:text-[var(--color-link-hover)]">{prevPost.data.title}</span>
+              <span class="mt-1 text-[var(--color-link)] group-hover:text-[var(--color-link-hover)]">{prevEntry.data.title}</span>
             </a>
           ) : <span />}
-          {nextPost ? (
+          {nextEntry ? (
             <a
-              href={`/posts/${getSlug(nextPost.id)}/`}
+              href={`/${section.id}/${getSlug(nextEntry.id)}/`}
               class="group flex flex-col items-start sm:items-end text-sm hover:text-foreground sm:max-w-[45%] sm:ml-auto py-2"
             >
               <span class="inline-flex items-center gap-1 text-muted-foreground group-hover:text-foreground">
                 {m.blog.nextPost}
                 <ArrowRight class="size-3.5" />
               </span>
-              <span class="mt-1 text-[var(--color-link)] group-hover:text-[var(--color-link-hover)]">{nextPost.data.title}</span>
+              <span class="mt-1 text-[var(--color-link)] group-hover:text-[var(--color-link-hover)]">{nextEntry.data.title}</span>
             </a>
           ) : <span />}
         </nav>

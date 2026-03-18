@@ -16,7 +16,7 @@ export function createMarkdownStaticPaths(locale: Locale) {
 }
 
 export function createMarkdownResponse(postId: string) {
-  const filePath = resolve(CONTENT_DIR, `${postId}.md`);
+  const filePath = resolve(CONTENT_DIR, `${postId}.mdx`);
   const raw = readFileSync(filePath, 'utf-8');
 
   return new Response(raw, {

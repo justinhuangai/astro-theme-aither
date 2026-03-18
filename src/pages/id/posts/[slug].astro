@@ -2,8 +2,8 @@
 import Tag from '@/components/Tag.astro';
 import CategoryPill from '@/components/CategoryPill.astro';
 import Giscus from '@/components/Giscus.astro';
-import ArrowLeft from '@/components/icons/ArrowLeft.astro';
-import ArrowRight from '@/components/icons/ArrowRight.astro';
+import { IconArrowLeft as ArrowLeft } from '@/components/icons';
+import { IconArrowRight as ArrowRight } from '@/components/icons';
 import Layout from '@/layouts/Layout.astro';
 import Container from '@/components/Container.astro';
 import Prose from '@/components/Prose.astro';
@@ -78,9 +78,9 @@ const alternateFormats = [
           {post.data.tags && post.data.tags.map((tag: string) => <Tag tag={tag} locale="id" />)}
         </div>
 
-        <h1 class="text-[31px] font-semibold mb-4 leading-[1.4] max-md:text-xl text-[var(--color-link)]">{post.data.title}</h1>
+        <h1 class="text-xl sm:text-2xl md:text-[31px] font-semibold mb-4 leading-[1.4] text-[var(--color-link)] break-words">{post.data.title}</h1>
 
-        <div class="mb-8 flex items-center gap-3 text-muted-foreground/60 text-xs font-mono" title={m.blog.readingTimeTooltip.replace('{words}', String(wordCount(post.body ?? ''))).replace('{minutes}', String(readingTime(post.body ?? '')))}>
+        <div class="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground/60 text-xs font-mono" title={m.blog.readingTimeTooltip.replace('{words}', String(wordCount(post.body ?? ''))).replace('{minutes}', String(readingTime(post.body ?? '')))}>
           <span>{formatDate(post.data.date)}</span>
           <span>·</span>
           <span>{wordCount(post.body ?? '')}{m.blog.wordCount}</span>
@@ -112,11 +112,11 @@ const alternateFormats = [
           <span class="flex-1 border-t border-border"></span>
         </div>
 
-        <nav class="mt-6 flex items-stretch justify-between gap-4">
+        <nav class="mt-6 flex flex-col sm:flex-row items-stretch justify-between gap-4">
           {prevPost ? (
             <a
               href={`/id/posts/${getSlug(prevPost.id)}/`}
-              class="group flex flex-col items-start text-sm hover:text-foreground max-w-[45%]"
+              class="group flex flex-col items-start text-sm hover:text-foreground sm:max-w-[45%] py-2"
             >
               <span class="inline-flex items-center gap-1 text-muted-foreground group-hover:text-foreground">
                 <ArrowLeft class="size-3.5" />
@@ -128,7 +128,7 @@ const alternateFormats = [
           {nextPost ? (
             <a
               href={`/id/posts/${getSlug(nextPost.id)}/`}
-              class="group flex flex-col items-end text-sm hover:text-foreground max-w-[45%] ml-auto"
+              class="group flex flex-col items-start sm:items-end text-sm hover:text-foreground sm:max-w-[45%] sm:ml-auto py-2"
             >
               <span class="inline-flex items-center gap-1 text-muted-foreground group-hover:text-foreground">
                 {m.blog.nextPost}

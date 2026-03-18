@@ -10,11 +10,30 @@ export interface FooterLink {
   title: string;
   href: string;
   external?: boolean;
+  /** Optional i18n key — looks up m.footer[labelKey], falls back to title */
+  labelKey?: string;
 }
 
 export interface FooterSection {
   title: string;
   items: FooterLink[];
+}
+
+/**
+ * Custom content section (beyond the default blog posts).
+ * Each section gets its own list page + detail pages, auto-routed.
+ *
+ * To add a section:
+ * 1. Add entry here
+ * 2. Register collection in src/content.config.ts
+ * 3. Create content in src/content/{id}/{locale}/
+ * 4. Add nav.{labelKey} to i18n messages
+ */
+export interface ContentSection {
+  /** Collection ID — must match content.config.ts collection name and src/content/{id}/ directory */
+  id: string;
+  /** i18n key used in nav and page title — maps to m.nav[labelKey] */
+  labelKey: string;
 }
 
 export const siteConfig = {
@@ -26,7 +45,7 @@ export const siteConfig = {
     name: 'Aither',
     avatar: '' as ImageMetadata | string, // Import from src/assets/ for optimization, or use URL string
   },
-  url: 'https://astro-theme-aither.pages.dev',
+  url: import.meta.env.SITE || 'https://astro-theme-aither.pages.dev',
   ogImage: '/og/index.png',
   images: {
     logoLight: '/logo.svg',
@@ -69,7 +88,7 @@ export const siteConfig = {
     websiteId: import.meta.env.PUBLIC_CRISP_WEBSITE_ID || '',
   },
   ui: {
-    defaultMode: 'dark' as const,
+    defaultMode: 'system' as const,
     enableModeSwitch: true,
   },
   giscus: {
@@ -82,8 +101,12 @@ export const siteConfig = {
     emitMetadata: false,
     inputPosition: 'top' as const,
   },
+  // Custom content sections — each one auto-generates list + detail pages
+  // Example: { id: 'translations', labelKey: 'translations' }
+  sections: [] as ContentSection[],
   nav: [
     { labelKey: 'blog' as const, href: '/' },
+    // Section nav items are auto-appended from sections config above
     { labelKey: 'about' as const, href: '/about' },
   ],
   footer: {
@@ -92,7 +115,7 @@ export const siteConfig = {
       {
         title: 'Navigate',
         items: [
-          { title: 'About', href: '/about' },
+          { title: 'About', href: '/about', labelKey: 'about' },
         ],
       },
       {
