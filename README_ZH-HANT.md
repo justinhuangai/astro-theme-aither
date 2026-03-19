@@ -419,7 +419,7 @@ pnpm build
 ## 致謝
 
 - 靈感來自 [yinwang.org](https://www.yinwang.org)。
-- 部分主題系統靈感來自 [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish)。
+- 部分主題系統靈感來自 [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish) 和 [EvoMap](https://evomap.ai)。
 
 ## 貢獻
 

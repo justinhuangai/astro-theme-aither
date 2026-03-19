@@ -419,7 +419,7 @@ pnpm build
 ## Danksagung
 
 - Inspiriert von [yinwang.org](https://www.yinwang.org).
-- Teile des Theme-Systems sind inspiriert von [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish).
+- Teile des Theme-Systems sind inspiriert von [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish) und [EvoMap](https://evomap.ai).
 
 ## Mitwirken
 

@@ -171,7 +171,7 @@ O workflow padrão usa Cloudflare Pages e espera `CLOUDFLARE_API_TOKEN`, `CLOUDF
 ## Agradecimentos
 
 - Inspirado por [yinwang.org](https://www.yinwang.org).
-- Partes do sistema de temas se inspiram em [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish).
+- Partes do sistema de temas se inspiram em [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish) e [EvoMap](https://evomap.ai).
 
 ## Contribuindo
 

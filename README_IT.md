@@ -417,7 +417,7 @@ pnpm build
 ## Ringraziamenti
 
 - Ispirato da [yinwang.org](https://www.yinwang.org).
-- Parti del sistema di temi si ispirano a [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish).
+- Parti del sistema di temi si ispirano a [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish) e a [EvoMap](https://evomap.ai).
 
 ## Contribuire
 

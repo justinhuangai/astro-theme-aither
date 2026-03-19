@@ -415,7 +415,7 @@ pnpm build
 ## 감사
 
 - [yinwang.org](https://www.yinwang.org)에서 영감을 받았습니다.
-- 테마 시스템 일부는 [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish)에서 영감을 받았습니다.
+- 테마 시스템 일부는 [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish)와 [EvoMap](https://evomap.ai)에서 영감을 받았습니다.
 
 ## 기여
 

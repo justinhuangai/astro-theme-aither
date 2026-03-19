@@ -126,7 +126,7 @@ Workflow default memakai Cloudflare Pages dan membutuhkan `CLOUDFLARE_API_TOKEN`
 ## Penghargaan
 
 - Terinspirasi oleh [yinwang.org](https://www.yinwang.org).
-- Sebagian sistem tema terinspirasi oleh [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish).
+- Sebagian sistem tema terinspirasi oleh [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish) dan [EvoMap](https://evomap.ai).
 
 ## Berkontribusi
 

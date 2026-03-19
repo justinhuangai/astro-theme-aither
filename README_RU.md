@@ -128,7 +128,7 @@ scripts/
 ## Благодарности
 
 - Вдохновлено [yinwang.org](https://www.yinwang.org).
-- Часть системы тем вдохновлена [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish).
+- Часть системы тем вдохновлена [Raphael Publish](https://github.com/liuxiaopai-ai/raphael-publish) и [EvoMap](https://evomap.ai).
 
 ## Вклад
 
