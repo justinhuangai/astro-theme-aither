@@ -175,56 +175,56 @@ const {
 
       {showThemeControls && (
         <Fragment>
-          <div class="w-full border-t border-border/50 pt-4">
-            <div class="flex items-center gap-2 px-2 pb-2 text-xs font-medium tracking-[0.02em] text-muted-foreground">
+          <div class="w-full border-t border-border/50 pt-3.5">
+            <div class="flex items-center gap-1.5 px-2 pb-1.5 text-[0.72rem] font-medium tracking-[0.02em] text-muted-foreground">
               <IconSun className="size-3.5" />
               {modeLabels.mainModes}
             </div>
             <div class="px-2">
-              <div class="inline-flex items-center gap-1 rounded-full border border-border p-1">
+              <div class="inline-flex items-center gap-0.5 rounded-full border border-border px-0.5 py-0.5">
                 <button
                   type="button"
-                  class="rounded-full p-2.5 transition-colors hover:bg-accent data-[active=true]:bg-accent data-[active=true]:text-primary"
+                  class="rounded-full p-2 transition-colors hover:bg-accent data-[active=true]:bg-accent data-[active=true]:text-primary"
                   data-mobile-mode="light"
                   data-active="false"
                   aria-label={modeLabels.light}
                 >
-                  <IconSun className="size-5" />
+                  <IconSun className="size-[1.1rem]" />
                 </button>
                 <button
                   type="button"
-                  class="rounded-full p-2.5 transition-colors hover:bg-accent data-[active=true]:bg-accent data-[active=true]:text-primary"
+                  class="rounded-full p-2 transition-colors hover:bg-accent data-[active=true]:bg-accent data-[active=true]:text-primary"
                   data-mobile-mode="dark"
                   data-active="false"
                   aria-label={modeLabels.dark}
                 >
-                  <IconMoon className="size-5" />
+                  <IconMoon className="size-[1.1rem]" />
                 </button>
                 <button
                   type="button"
-                  class="rounded-full p-2.5 transition-colors hover:bg-accent data-[active=true]:bg-accent data-[active=true]:text-primary"
+                  class="rounded-full p-2 transition-colors hover:bg-accent data-[active=true]:bg-accent data-[active=true]:text-primary"
                   data-mobile-mode="system"
                   data-active="false"
                   aria-label={modeLabels.system}
                 >
-                  <IconMonitor className="size-5" />
+                  <IconMonitor className="size-[1.1rem]" />
                 </button>
               </div>
             </div>
           </div>
 
           {showMoreThemes && (
-            <div class="w-full border-t border-border/50 pt-4">
-              <div class="flex items-center gap-2 px-2 pb-2 text-xs font-medium tracking-[0.02em] text-muted-foreground">
+            <div class="w-full border-t border-border/50 pt-3.5">
+              <div class="flex items-center gap-1.5 px-2 pb-1.5 text-[0.72rem] font-medium tracking-[0.02em] text-muted-foreground">
                 <IconPalette className="size-3.5" />
                 <span>{modeLabels.moreThemes}</span>
-                <span class="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-primary/85">
+                <span class="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-1.5 py-[0.15rem] text-[8px] font-semibold uppercase tracking-[0.1em] text-primary/85">
                   {modeLabels.beta ?? 'Beta'}
                 </span>
               </div>
               <div class="px-2">
                 <select
-                  class="w-full rounded-md border border-border bg-background px-3 py-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                  class="w-full rounded-md border border-border bg-background px-3 py-2.5 text-[0.95rem] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
                   data-mobile-theme-select
                   aria-label={modeLabels.moreThemes}
                 >
