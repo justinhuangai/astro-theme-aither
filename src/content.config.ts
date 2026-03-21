@@ -1,4 +1,4 @@
-import { defineCollection, type SchemaContext } from 'astro:content';
+import { defineCollection, type SchemaContext, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { createAitherContentSchema } from '@aither/astro/content';
 
@@ -16,10 +16,21 @@ const posts = defineCollection({
   schema: contentSchema,
 });
 
+const gallery = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/gallery' }),
+  schema: ({ image }) =>
+    createAitherContentSchema({ image }).extend({
+      cover: z.string().optional(),
+      images: z.array(z.string()).min(1),
+      device: z.string().optional(),
+      location: z.string().optional(),
+    }),
+});
+
 // --- Add new sections below (copy & rename) ---
 // const translations = defineCollection({
 //   loader: glob({ pattern: '**/*.mdx', base: './src/content/translations' }),
 //   schema: contentSchema,
 // });
 
-export const collections = { posts };
+export const collections = { posts, gallery };

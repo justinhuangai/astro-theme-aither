@@ -86,6 +86,30 @@ export interface SiteFooterConfig {
   sections: FooterSection[];
 }
 
+export interface SiteTimePlusGalleryConfig {
+  paginationSize?: number;
+  indexName?: string;
+  indexSuffix?: string;
+  headerName?: string;
+  headerSubtitle?: string;
+  logo?: string;
+  icon?: string;
+  appleIcon?: string;
+  ogImage?: string;
+  brandName?: string;
+  subtitle?: string;
+  aboutHtml?: string;
+  homeHref?: string;
+  weiboHref?: string;
+  githubHref?: string;
+  themeDisplayName?: string;
+  statsHtml?: string;
+  police?: string;
+  icp?: string;
+  thumbnailSuffix?: string;
+  displaySuffix?: string;
+}
+
 export interface AitherSiteConfig {
   name: string;
   title: string;
@@ -104,6 +128,7 @@ export interface AitherSiteConfig {
   sections: ContentSection[];
   nav: SiteNavItem[];
   footer: SiteFooterConfig;
+  timeplusGallery?: SiteTimePlusGalleryConfig;
 }
 
 export declare function defineAitherSiteConfig<T extends AitherSiteConfig>(config: T): T;
