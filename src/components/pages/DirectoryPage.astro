@@ -1,6 +1,8 @@
 ---
 import DirectoryLayout from '@/layouts/DirectoryLayout.astro';
-import HeolinkSearch from '@/components/directory/HeolinkSearch.astro';
+import DirectorySearch from '@/components/directory/DirectorySearch.astro';
+import DirectoryTransparency from '@/components/directory/DirectoryTransparency.astro';
+import { siteConfig } from '@/config/site';
 import { getLocalizedPath, type Locale } from '@/i18n';
 import { getDirectoryContent } from '@/lib/directory';
 
@@ -16,11 +18,10 @@ const directoryHref = getLocalizedPath('/directory', locale);
 <DirectoryLayout
   locale={locale}
   pageTitle={content.pageTitle}
-  description={content.siteSubtitle}
+  description={siteConfig.description}
   backgroundColor={content.backgroundColor}
   directoryHref={directoryHref}
   siteTitle={content.siteTitle}
-  logoImage={content.siteLogo}
   footerThemeAttribution={content.footerThemeAttribution}
   footerThemeUrl={content.footerThemeUrl}
   footerIcp={content.footerIcp}
@@ -34,35 +35,26 @@ const directoryHref = getLocalizedPath('/directory', locale);
 >
   <div class="linkPage">
     <div class="linkPage_content">
-      {
-        content.showCoverImage ? (
-          <div class="site_info_group" id="directory-hero">
-            <div class="site_info_text">
-              <h1 class="site_info_group_title">{content.siteTitle}</h1>
-              <span class="site_info_group_desc">{content.siteSubtitle}</span>
-            </div>
-
-            <img
-              class="site_info_group_back_cover"
-              src={content.coverImage}
-              alt={content.siteTitle}
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        ) : null
-      }
-
-      <HeolinkSearch
-        searchEngineUrl={content.search.engine}
-        searchIcon={content.search.icon}
+      <DirectorySearch
         placeholder={content.search.placeholder}
+        locale={content.search.locale}
+        emptyTitle={content.search.emptyTitle}
+        emptyDescription={content.search.emptyDescription}
       />
+
+      <div class="directory-search-empty" id="directorySearchEmpty" hidden>
+        <h3>{content.search.emptyTitle}</h3>
+        <p>{content.search.emptyDescription}</p>
+      </div>
 
       {
         content.groups.map((group) =>
-          group.annotations.show_on_heolink === 'true' && group.links.length > 0 ? (
-            <div class="link_group">
+          group.annotations.show_in_directory === 'true' && group.links.length > 0 ? (
+            <div
+              class="link_group"
+              data-directory-group
+              data-directory-group-id={group.anchorId}
+            >
               {group.spec.displayName ? (
                 <div class="link_group_title_content">
                   <i class={group.annotations.icon}></i>
@@ -78,6 +70,9 @@ const directoryHref = getLocalizedPath('/directory', locale);
                     <a
                       class="link_group_content_link"
                       href={link.href}
+                      data-directory-card
+                      data-directory-card-id={link.cardId}
+                      data-directory-card-group-id={group.anchorId}
                       target={link.external ? '_blank' : undefined}
                       rel={link.external ? 'noreferrer noopener' : undefined}
                     >
@@ -111,6 +106,33 @@ const directoryHref = getLocalizedPath('/directory', locale);
           ) : null,
         )
       }
+
+      <DirectoryTransparency locale={locale} />
     </div>
   </div>
 </DirectoryLayout>
+
+<style>
+  .directory-search-empty {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.5rem 0 2rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgb(221 228 248);
+    border-radius: 20px;
+    background: rgb(255 255 255 / 88%);
+    color: #536176;
+  }
+
+  .directory-search-empty h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1f2937;
+  }
+
+  .directory-search-empty p {
+    margin: 0;
+    line-height: 1.6;
+  }
+</style>

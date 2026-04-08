@@ -1,4 +1,4 @@
-import { directoryGroupsSource, type LocalizedDirectoryValue } from '@/data/directory-heolink';
+import { directoryGroupsSource, type LocalizedDirectoryValue } from '@/data/directory-links';
 import { siteConfig } from '@/config/site';
 import { getLocalizedPath, type Locale } from '@/i18n';
 
@@ -13,6 +13,7 @@ export interface DirectoryLink {
     show_link_anonymous: 'true' | 'false';
     to_post_radio: 'true' | 'false';
   };
+  cardId: string;
   href: string;
   external: boolean;
   displayLogo: string;
@@ -24,7 +25,7 @@ export interface DirectoryGroup {
   };
   annotations: {
     icon: string;
-    show_on_heolink: 'true' | 'false';
+    show_in_directory: 'true' | 'false';
     show_group_anonymous: 'true' | 'false';
   };
   links: DirectoryLink[];
@@ -32,21 +33,18 @@ export interface DirectoryGroup {
 }
 
 interface DirectorySearchConfig {
-  engine: string;
+  provider: 'pagefind';
   icon: string;
   placeholder: string;
-  isPostChat: boolean;
-  isLocal: boolean;
+  locale: Locale;
+  emptyTitle: string;
+  emptyDescription: string;
 }
 
 export interface DirectoryContent {
   pageTitle: string;
   siteTitle: string;
-  siteSubtitle: string;
   backgroundColor: string;
-  showCoverImage: boolean;
-  coverImage: string;
-  siteLogo: string;
   footerThemeAttribution: string;
   footerThemeUrl: string;
   footerIcp: string;
@@ -61,13 +59,15 @@ export interface DirectoryContent {
 }
 
 const SEARCH_ICONS = {
-  baidu: '/directory/heolink/images/search/baidu.svg',
-  google: '/directory/heolink/images/search/google.svg',
-  bing: '/directory/heolink/images/search/bing.svg',
-  sougou: '/directory/heolink/images/search/sougou.svg',
-  local: '/directory/heolink/images/search/local.svg',
-  postchat: '/directory/heolink/images/search/postchat.svg',
+  baidu: '/directory/ui/images/search/baidu.svg',
+  google: '/directory/ui/images/search/google.svg',
+  bing: '/directory/ui/images/search/bing.svg',
+  sougou: '/directory/ui/images/search/sougou.svg',
+  local: '/directory/assets/search.svg',
+  postchat: '/directory/ui/images/search/postchat.svg',
 } as const;
+
+const SELFHST_ICON_BASE = 'https://cdn.jsdelivr.net/gh/selfhst/icons';
 
 function createDirectoryAnchorId(input: string, index: number): string {
   const slug = input
@@ -80,6 +80,19 @@ function createDirectoryAnchorId(input: string, index: number): string {
   return slug ? `directory-group-${index + 1}-${slug}` : `directory-group-${index + 1}`;
 }
 
+function createDirectoryCardId(groupInput: string, linkInput: string, groupIndex: number, linkIndex: number): string {
+  const slug = `${groupInput}-${linkInput}`
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\u4e00-\u9fff]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  return slug
+    ? `directory-card-${groupIndex + 1}-${linkIndex + 1}-${slug}`
+    : `directory-card-${groupIndex + 1}-${linkIndex + 1}`;
+}
+
 function resolveLocalizedValue(locale: Locale, value: LocalizedDirectoryValue): string {
   if (typeof value === 'string') {
     return value;
@@ -89,51 +102,34 @@ function resolveLocalizedValue(locale: Locale, value: LocalizedDirectoryValue): 
 }
 
 function resolveSearchConfig(locale: Locale): DirectorySearchConfig {
-  const rawEngine = siteConfig.directoryHeolink?.searchEngine?.trim() ?? '';
-  const normalizedEngine =
-    rawEngine !== ''
-      ? rawEngine
-      : locale === 'zh-hans' || locale === 'zh-hant'
-        ? 'https://www.baidu.com/s?wd='
-        : 'https://www.google.com/search?q=';
-
-  if (normalizedEngine === 'postchat') {
-    return {
-      engine: normalizedEngine,
-      icon: SEARCH_ICONS.postchat,
-      placeholder: siteConfig.directoryHeolink?.searchPlaceholder ?? '输入搜索内容...',
-      isPostChat: true,
-      isLocal: false,
-    };
-  }
-
-  if (normalizedEngine === 'local') {
-    return {
-      engine: normalizedEngine,
-      icon: SEARCH_ICONS.local,
-      placeholder: siteConfig.directoryHeolink?.searchPlaceholder ?? '输入搜索内容...',
-      isPostChat: false,
-      isLocal: true,
-    };
-  }
-
-  const searchEngineMap = [
-    ['baidu', 'baidu.com/s?wd='],
-    ['google', 'google.com/search?q='],
-    ['bing', 'bing.com/search?q='],
-    ['bing', 'cn.bing.com/search?q='],
-    ['sougou', 'sogou.com/web?query='],
-  ] as const;
-
-  const searchKey =
-    searchEngineMap.find(([, match]) => normalizedEngine.includes(match))?.[0] ?? 'google';
+  const configuredPlaceholder = siteConfig.directoryPage?.searchPlaceholder?.trim();
+  const defaultPlaceholder =
+    locale === 'zh-hant'
+      ? '搜尋導航內容...'
+      : locale === 'zh-hans'
+        ? '搜索导航内容...'
+        : 'Search the directory...';
 
   return {
-    engine: normalizedEngine,
-    icon: SEARCH_ICONS[searchKey],
-    placeholder: siteConfig.directoryHeolink?.searchPlaceholder ?? '输入搜索内容...',
-    isPostChat: false,
-    isLocal: false,
+    provider: 'pagefind',
+    icon: SEARCH_ICONS.local,
+    placeholder:
+      configuredPlaceholder && configuredPlaceholder !== '输入搜索内容...'
+        ? configuredPlaceholder
+        : defaultPlaceholder,
+    locale,
+    emptyTitle:
+      locale === 'zh-hant'
+        ? '沒有找到結果'
+        : locale === 'zh-hans'
+          ? '没有找到结果'
+          : 'No results found',
+    emptyDescription:
+      locale === 'zh-hant'
+        ? '試試其他關鍵字或更短的搜尋詞。'
+        : locale === 'zh-hans'
+          ? '试试其他关键词或更短的搜索词。'
+          : 'Try a different keyword or a shorter query.',
   };
 }
 
@@ -151,21 +147,28 @@ function resolveDirectoryHref(locale: Locale, url: string): { href: string; exte
   };
 }
 
+function resolveSelfhstLogo(reference: string): string {
+  return `${SELFHST_ICON_BASE}/svg/${reference}.svg`;
+}
+
 function resolveDirectoryLogo(url: string, logo?: string): string {
   if (logo) {
+    if (logo.startsWith('selfhst:')) {
+      return resolveSelfhstLogo(logo.slice('selfhst:'.length));
+    }
+
     return logo;
   }
 
   const iconApi =
-    siteConfig.directoryHeolink?.iconApi?.trim() || 'https://api.zhheo.com/favicon/get.php?url={url}';
+    siteConfig.directoryPage?.iconApi?.trim() || 'https://www.google.com/s2/favicons?sz=128&domain_url={url}';
   return iconApi.replace('{url}', url);
 }
 
 export function getDirectoryContent(locale: Locale): DirectoryContent {
-  const siteTitle = siteConfig.directoryHeolink?.siteTitle?.trim() || siteConfig.name;
-  const siteSubtitle = siteConfig.directoryHeolink?.siteSubtitle?.trim() || siteConfig.description;
+  const siteTitle = siteConfig.directoryPage?.siteTitle?.trim() || siteConfig.name;
   const pageTitle =
-    siteConfig.directoryHeolink?.indexTitle?.trim() || `${siteTitle} | ${siteConfig.name}`;
+    siteConfig.directoryPage?.indexTitle?.trim() || `${siteTitle} | ${siteConfig.name}`;
 
   const groups: DirectoryGroup[] = directoryGroupsSource.map((group, index) => {
     const displayName = resolveLocalizedValue(locale, group.spec.displayName);
@@ -176,15 +179,17 @@ export function getDirectoryContent(locale: Locale): DirectoryContent {
       },
       annotations: {
         icon: group.annotations.icon,
-        show_on_heolink: group.annotations.show_on_heolink ?? 'true',
+        show_in_directory: group.annotations.show_in_directory ?? 'true',
         show_group_anonymous: group.annotations.show_group_anonymous ?? 'false',
       },
-      links: group.links.map((link) => {
+      links: group.links.map((link, linkIndex) => {
         const resolved = resolveDirectoryHref(locale, link.spec.url);
+        const linkDisplayName = resolveLocalizedValue(locale, link.spec.displayName);
+        const linkDescription = resolveLocalizedValue(locale, link.spec.description);
         return {
           spec: {
-            displayName: resolveLocalizedValue(locale, link.spec.displayName),
-            description: resolveLocalizedValue(locale, link.spec.description),
+            displayName: linkDisplayName,
+            description: linkDescription,
             url: link.spec.url,
             logo: link.spec.logo,
           },
@@ -192,6 +197,7 @@ export function getDirectoryContent(locale: Locale): DirectoryContent {
             show_link_anonymous: link.annotations?.show_link_anonymous ?? 'false',
             to_post_radio: link.annotations?.to_post_radio ?? 'false',
           },
+          cardId: createDirectoryCardId(displayName, linkDisplayName, index, linkIndex),
           href: resolved.href,
           external: resolved.external,
           displayLogo: resolveDirectoryLogo(link.spec.url, link.spec.logo),
@@ -204,22 +210,16 @@ export function getDirectoryContent(locale: Locale): DirectoryContent {
   return {
     pageTitle,
     siteTitle,
-    siteSubtitle,
-    backgroundColor: siteConfig.directoryHeolink?.backgroundColor?.trim() || '#f2f2f2',
-    showCoverImage: siteConfig.directoryHeolink?.showCoverImage ?? true,
-    coverImage:
-      siteConfig.directoryHeolink?.coverImage?.trim() || '/directory/heolink/images/index_cover2.jpg',
-    siteLogo:
-      siteConfig.directoryHeolink?.logoImage?.trim() || '/directory/heolink/upload/logo_cover.png',
-    footerThemeAttribution: 'Theme HeoLink by Halo',
-    footerThemeUrl: 'https://github.com/zhheo/halo-theme-heolink',
-    footerIcp: siteConfig.directoryHeolink?.indexIcp?.trim() || '',
-    footerIcp2: siteConfig.directoryHeolink?.indexIcp2?.trim() || '',
-    consoleHref: siteConfig.directoryHeolink?.consoleHref?.trim() || '',
-    consoleTitle: siteConfig.directoryHeolink?.consoleTitle?.trim() || '管理后台',
-    postchatEnabled: siteConfig.directoryHeolink?.postchatEnable ?? false,
-    postchatButtonText: siteConfig.directoryHeolink?.postchatButtonText?.trim() || '智能对话',
-    postchatButtonHref: siteConfig.directoryHeolink?.postchatButtonHref?.trim() || '',
+    backgroundColor: siteConfig.directoryPage?.backgroundColor?.trim() || '#f2f2f2',
+    footerThemeAttribution: '',
+    footerThemeUrl: '',
+    footerIcp: siteConfig.directoryPage?.indexIcp?.trim() || '',
+    footerIcp2: siteConfig.directoryPage?.indexIcp2?.trim() || '',
+    consoleHref: siteConfig.directoryPage?.consoleHref?.trim() || '',
+    consoleTitle: siteConfig.directoryPage?.consoleTitle?.trim() || '管理后台',
+    postchatEnabled: siteConfig.directoryPage?.postchatEnable ?? false,
+    postchatButtonText: siteConfig.directoryPage?.postchatButtonText?.trim() || '智能对话',
+    postchatButtonHref: siteConfig.directoryPage?.postchatButtonHref?.trim() || '',
     search: resolveSearchConfig(locale),
     groups,
   };

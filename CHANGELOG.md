@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [CalVer](https://calver.org/) versioning (`YYYY.0M.0D`).
 
+## astro-theme-aither v2026.04.08
+
+### Added
+- Local Pagefind-powered search for the directory experience in both dev and production builds
+- A compact footer disclosure for icon sourcing, licensing, and brand-use notes on the directory page
+- `directoryPage` config typing in the shared `@aither/astro/site` surface
+
+### Changed
+- Release version to `2026.04.08`
+- Directory assets, scripts, and runtime naming are now standardized around `directory` and `ui` terminology instead of the previous upstream-specific naming
+- Directory icons now support `selfhst:` references alongside local fallback assets and generated favicons
+- Navbar and photos page layout spacing now align with the directory experience more cleanly
+
+### Fixed
+- Production builds now generate the directory search index as part of the main build flow
+- Directory card markup, search state handling, and empty-state rendering now behave consistently across locales
+- Removed remaining upstream-specific naming from shipped source and built output paths
+
 ## astro-theme-aither v2026.03.20
 
 ### Added

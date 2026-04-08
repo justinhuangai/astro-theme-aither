@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '@/i18n';
 import type { DirectoryGroup } from '@/lib/directory';
-import HeolinkNav from '@/components/directory/HeolinkNav.astro';
+import DirectoryNav from '@/components/directory/DirectoryNav.astro';
 import Layout from '@/layouts/Layout.astro';
 
 interface Props {
@@ -11,7 +11,6 @@ interface Props {
   backgroundColor: string;
   directoryHref: string;
   siteTitle: string;
-  logoImage: string;
   footerThemeAttribution: string;
   footerThemeUrl: string;
   footerIcp: string;
@@ -31,7 +30,6 @@ const {
   backgroundColor,
   directoryHref,
   siteTitle,
-  logoImage,
   footerThemeAttribution,
   footerThemeUrl,
   footerIcp,
@@ -56,20 +54,19 @@ const heroHref = directoryHref;
   mainClass="directory-main"
 >
   <Fragment slot="head">
-    <link rel="stylesheet" href="/directory/heolink/css/style.css" />
+    <link rel="stylesheet" href="/directory/ui/css/style.css" />
     <link rel="stylesheet" href="/directory/astro-adapter.css" />
-    <link rel="stylesheet" href="/directory/heolink/fonts/remixicon.css" />
-    <script is:inline src="/directory/heolink/js/main.js"></script>
-    <script is:inline src="/directory/heolink/js/heolink.js"></script>
-    <script is:inline src="/directory/heolink/js/pjax.min.js"></script>
+    <link rel="stylesheet" href="/directory/ui/fonts/remixicon.css" />
+    <script is:inline src="/directory/ui/js/main.js"></script>
+    <script is:inline src="/directory/ui/js/directory.js"></script>
+    <script is:inline src="/directory/ui/js/pjax.min.js"></script>
   </Fragment>
 
   <section class="directory-shell" style={`background-color: ${backgroundColor}`}>
-    <div class="heolink_site">
-      <HeolinkNav
+    <div class="directory_site">
+      <DirectoryNav
         heroHref={heroHref}
         siteTitle={siteTitle}
-        logoImage={logoImage}
         footerThemeAttribution={footerThemeAttribution}
         footerThemeUrl={footerThemeUrl}
         footerIcp={footerIcp}
@@ -107,7 +104,7 @@ const heroHref = directoryHref;
     min-height: 0;
   }
 
-  .directory-shell .heolink_site {
+  .directory-shell .directory_site {
     height: 100%;
     min-height: 0;
   }

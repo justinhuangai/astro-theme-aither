@@ -3,14 +3,14 @@ function showNav() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  initHeoLink();
+  initDirectoryUi();
 });
 
 document.addEventListener('pjax:complete', function() {
-  initHeoLink();
+  initDirectoryUi();
 });
 
-function initHeoLink() {
+function initDirectoryUi() {
   const pjax = new Pjax({
     selectors: [
       "title",
@@ -18,6 +18,6 @@ function initHeoLink() {
     ]
   })
 
-  heolink.initNavLink();
-  heolink.listenNavScroll();
+  directoryUi.initNavLink();
+  directoryUi.listenNavScroll();
 }

@@ -4,7 +4,6 @@ import type { DirectoryGroup } from '@/lib/directory';
 interface Props {
   heroHref: string;
   siteTitle: string;
-  logoImage: string;
   footerThemeAttribution: string;
   footerThemeUrl: string;
   footerIcp: string;
@@ -20,7 +19,6 @@ interface Props {
 const {
   heroHref,
   siteTitle,
-  logoImage,
   footerThemeAttribution,
   footerThemeUrl,
   footerIcp,
@@ -34,7 +32,7 @@ const {
 } = Astro.props;
 
 const visibleGroups = groups.filter(
-  (group) => group.annotations.show_on_heolink === 'true' && group.spec.displayName !== '',
+  (group) => group.annotations.show_in_directory === 'true' && group.spec.displayName !== '',
 );
 ---
 
@@ -47,11 +45,7 @@ const visibleGroups = groups.filter(
   </a>
 </div>
 
-<div class="nav_list" id="nav_list">
-  <a class="site_logo" href={heroHref} aria-label={siteTitle}>
-    <img src={logoImage} alt="logo" loading="eager" decoding="async" />
-  </a>
-
+<div class="nav_list nav_list--no-logo" id="nav_list">
   <div class="left_nav_group" id="left_nav_group">
     {
       visibleGroups.map((group) => (
@@ -64,6 +58,8 @@ const visibleGroups = groups.filter(
           <a
             class="left_nav_link_group_title"
             data-target={group.anchorId}
+            data-directory-nav-link
+            data-directory-nav-group-id={group.anchorId}
             href={`${heroHref}#${group.anchorId}`}
             onclick="hideNav()"
           >
@@ -93,7 +89,7 @@ const visibleGroups = groups.filter(
             <a
               class="left_nav_link_group_title notneedjump"
               href="javascript:void(0)"
-              data-heolink-postchat-trigger
+              data-directory-postchat-trigger
             >
               <i class="ri-chat-ai-fill"></i>
               <span>{postchatButtonText}</span>
@@ -140,23 +136,27 @@ const visibleGroups = groups.filter(
           </a>
         ) : null
       }
-      <a
-        href={footerThemeUrl}
-        target="_blank"
-        rel="noreferrer noopener"
-        class="theme_info"
-        title={footerThemeAttribution}
-        data-pjax-state="external"
-      >
-        {footerThemeAttribution}
-      </a>
+      {
+        footerThemeAttribution && footerThemeUrl ? (
+          <a
+            href={footerThemeUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="theme_info"
+            title={footerThemeAttribution}
+            data-pjax-state="external"
+          >
+            {footerThemeAttribution}
+          </a>
+        ) : null
+      }
     </div>
   </div>
 </div>
 
 <script is:inline>
-  function initHeolinkNav() {
-    const trigger = document.querySelector('[data-heolink-postchat-trigger]');
+  function initDirectoryNav() {
+    const trigger = document.querySelector('[data-directory-postchat-trigger]');
     if (!(trigger instanceof HTMLAnchorElement)) {
       return;
     }
@@ -170,7 +170,7 @@ const visibleGroups = groups.filter(
     };
   }
 
-  document.addEventListener('DOMContentLoaded', initHeolinkNav);
-  document.addEventListener('astro:page-load', initHeolinkNav);
-  document.addEventListener('pjax:complete', initHeolinkNav);
+  document.addEventListener('DOMContentLoaded', initDirectoryNav);
+  document.addEventListener('astro:page-load', initDirectoryNav);
+  document.addEventListener('pjax:complete', initDirectoryNav);
 </script>

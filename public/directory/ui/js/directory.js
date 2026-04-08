@@ -1,4 +1,4 @@
-var heolink = {
+var directoryUi = {
   initNavLink: function() {
     // 获取所有的导航链接，排除nav_postchat类
     const navLinks = document.querySelectorAll(".left_nav_link_group_title:not(.notneedjump)");
@@ -23,13 +23,13 @@ var heolink = {
           // 如果目标元素不存在，存储目标ID到本地存储
           localStorage.setItem('targetId', targetId);
           
-          // 检查当前URL是否包含 ?preview-theme=theme-heolink 参数
+          // 检查当前URL是否包含 ?preview-theme=theme-directory 参数
           const currentUrlParams = new URLSearchParams(window.location.search);
           let redirectUrl = "/"; // 默认跳转到首页
           
-          if (currentUrlParams.has("preview-theme") && currentUrlParams.get("preview-theme") === "theme-heolink") {
+          if (currentUrlParams.has("preview-theme") && currentUrlParams.get("preview-theme") === "theme-directory") {
             // 如果包含指定的参数，则在跳转时附加参数
-            redirectUrl += "?preview-theme=theme-heolink";
+            redirectUrl += "?preview-theme=theme-directory";
           }
           
           // 跳转到首页或包含参数的首页

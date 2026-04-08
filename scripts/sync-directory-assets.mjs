@@ -5,12 +5,12 @@ import process from 'node:process';
 const repoRoot = process.cwd();
 const sourceRoot = path.join(
   repoRoot,
-  '.references/halo-theme-heolink/templates/assets',
+  '.references/directory-theme-source/templates/assets',
 );
-const destinationRoot = path.join(repoRoot, 'public/directory/heolink');
+const destinationRoot = path.join(repoRoot, 'public/directory/ui');
 const liveSnapshotUploadRoot = path.join(
   repoRoot,
-  '.references/live-sites/halo-zhheo-com-snapshot/halo.zhheo.com/upload',
+  '.references/live-sites/directory-source-snapshot/site-source/upload',
 );
 
 const skipPatterns = [
@@ -63,7 +63,7 @@ async function copyUploadAssets(sourceDir) {
 const copiedUploadAssets = await copyUploadAssets(liveSnapshotUploadRoot);
 
 if (!copiedUploadAssets) {
-  throw new Error('Unable to sync HeoLink upload assets from snapshot reference.');
+  throw new Error('Unable to sync Directory upload assets from snapshot reference.');
 }
 
 const legacySidebarLogo = path.join(uploadDestination, 'logo_cover备份.png');
@@ -71,4 +71,4 @@ const normalizedSidebarLogo = path.join(uploadDestination, 'logo_cover.png');
 
 await cp(legacySidebarLogo, normalizedSidebarLogo, { force: true });
 
-console.log(`Synced HeoLink assets from ${sourceRoot} to ${destinationRoot}`);
+console.log(`Synced Directory assets from ${sourceRoot} to ${destinationRoot}`);
