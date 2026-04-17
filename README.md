@@ -253,7 +253,7 @@ export const siteConfig = {
   },
   sections: [
     // Optional extra collections beyond posts
-    // { id: 'translations', labelKey: 'translations' },
+    // { id: 'translations', labelKey: 'translations', contentLocale: 'zh-hans' },
   ],
   giscus: {
     repo: '...',
@@ -281,7 +281,7 @@ The project is already wired for more than one collection. To add a new section:
 
 ```typescript
 // src/config/site.ts
-sections: [{ id: 'translations', labelKey: 'translations' }]
+sections: [{ id: 'translations', labelKey: 'translations', contentLocale: 'zh-hans' }]
 
 // src/content.config.ts
 const translations = defineCollection({
@@ -292,7 +292,9 @@ const translations = defineCollection({
 export const collections = { posts, translations };
 ```
 
-Then create content under `src/content/translations/{locale}/`. List and detail routes are generated automatically at `/translations/`, `/{locale}/translations/`, and their nested slug pages.
+Then create content under `src/content/translations/{locale}/`. If you set `contentLocale`, store the content only in that locale directory, for example `src/content/translations/zh-hans/`. List and detail routes are generated automatically at `/translations/`, `/{locale}/translations/`, and their nested slug pages.
+
+Use `contentLocale` when a section should publish one canonical content language while still reusing the surrounding site shell in every locale. The built-in translations shelf uses this pattern so the interface stays localized but the translated article body remains Simplified Chinese everywhere.
 
 ### Astro config (`astro.config.mjs`)
 

@@ -10,7 +10,13 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: Locale };
 const currentPage = Number(Astro.params.num);
-const { posts, totalPages } = await getPaginatedPosts(locale, currentPage);
+const { posts, totalPages, allPosts } = await getPaginatedPosts(locale, currentPage);
 ---
 
-<BlogIndexPage locale={locale} currentPage={currentPage} posts={posts} totalPages={totalPages} />
+<BlogIndexPage
+  locale={locale}
+  currentPage={currentPage}
+  posts={posts}
+  totalPages={totalPages}
+  totalPostCount={allPosts.length}
+/>

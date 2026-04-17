@@ -97,7 +97,9 @@ export const siteConfig = defineAitherSiteConfig({
   },
   // Custom content sections — each one auto-generates list + detail pages
   // Example: { id: 'translations', labelKey: 'translations' }
-  sections: [] as ContentSection[],
+  sections: [
+    { id: 'translations', labelKey: 'translations', contentLocale: 'zh-hans' },
+  ] as ContentSection[],
   nav: [
     { labelKey: 'blog' as const, href: '/' },
     { labelKey: 'gallery' as const, href: '/photos' },
@@ -111,6 +113,7 @@ export const siteConfig = defineAitherSiteConfig({
       {
         title: 'Navigate',
         items: [
+          { title: 'Translations', href: '/translations', labelKey: 'translations' },
           { title: 'About', href: '/about', labelKey: 'about' },
         ],
       },

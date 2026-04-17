@@ -4,10 +4,11 @@ import AudiencePanel from '@/components/AudiencePanel.astro';
 import BlogCard from '@/components/BlogCard.astro';
 import BlogGrid from '@/components/BlogGrid.astro';
 import BlogPagination from '@/components/BlogPagination.astro';
+import ContentSectionHeader from '@/components/ContentSectionHeader.astro';
 import Container from '@/components/Container.astro';
 import { siteConfig } from '@/config/site';
 import Layout from '@/layouts/Layout.astro';
-import { getLocaleBasePath, getMessages, type Locale } from '@/i18n';
+import { getLocaleBasePath, getMessages, intlLocales, type Locale } from '@/i18n';
 import { getSlug, type PostEntry } from '@/lib/posts';
 import { buildWebsiteJsonLd } from '@/lib/site-content';
 
@@ -16,9 +17,10 @@ interface Props {
   currentPage: number;
   posts: PostEntry[];
   totalPages: number;
+  totalPostCount: number;
 }
 
-const { locale, currentPage, posts, totalPages } = Astro.props;
+const { locale, currentPage, posts, totalPages, totalPostCount } = Astro.props;
 const basePath = getLocaleBasePath(locale);
 const websiteJsonLd = buildWebsiteJsonLd(locale);
 const m = getMessages(locale);
@@ -26,6 +28,10 @@ const tabBaseId = `home-tab-${locale}`;
 const readerTabLabel = m.forAgents.humanTab;
 const agentTabLabel = m.forAgents.agentTab;
 const postsSectionLabel = m.blog.allPosts;
+const totalPostsLabel = m.blog.totalPosts.replace(
+  '{count}',
+  new Intl.NumberFormat(intlLocales[locale]).format(totalPostCount),
+);
 const skillUrl = new URL('/skill.md', siteConfig.url).toString();
 const withSkillUrl = (value: string) => value.replaceAll('{skillUrl}', skillUrl);
 const copyLabels = {
@@ -125,7 +131,7 @@ const audienceCopy = {
             copyLabel={copyLabels.copy}
             copiedLabel={copyLabels.copied}
           />
-          <h2 class="content-section-heading">{postsSectionLabel}</h2>
+          <ContentSectionHeader title={postsSectionLabel} countLabel={totalPostsLabel} />
           <BlogGrid>
             {
               posts.map((post) => (
@@ -156,7 +162,7 @@ const audienceCopy = {
             copyLabel={copyLabels.copy}
             copiedLabel={copyLabels.copied}
           />
-          <h2 class="content-section-heading">{postsSectionLabel}</h2>
+          <ContentSectionHeader title={postsSectionLabel} countLabel={totalPostsLabel} />
           <AIAccessList locale={locale} posts={posts} />
         </div>
       </div>
@@ -189,17 +195,6 @@ const audienceCopy = {
 
   .blog-index-shell :global(.audience-panel-frame) {
     margin-bottom: 1.45rem;
-  }
-
-  .content-section-heading {
-    width: 100%;
-    max-width: none;
-    margin: 0 0 1.35rem;
-    font-size: clamp(1.3rem, 2.1vw, 1.55rem);
-    font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: -0.035em;
-    color: var(--foreground);
   }
 
   .home-tab {

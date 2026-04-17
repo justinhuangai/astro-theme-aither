@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [CalVer](https://calver.org/) versioning (`YYYY.0M.0D`).
 
+## astro-theme-aither v2026.04.17
+
+### Added
+- A first-class `translations` section with sample Simplified Chinese translation content, source metadata fields, and an editorial-style source context card on translation articles
+- Shared content section header/count UI so custom sections can match the homepage listing treatment
+- `contentLocale` support in `ContentSection` config so a section can publish one canonical content language while the surrounding site shell stays localized
+
+### Changed
+- Release version to `2026.04.17`
+- Navbar section items now appear directly after `Blog`, keeping long-form reading surfaces grouped together
+- Translation list and detail pages now reuse the blog/article design system instead of shipping a separate feature-specific template
+- Translation pages now canonicalize to their fixed content locale and suppress misleading locale alternates when the content itself is not localized
+
+### Fixed
+- Section heading count chips now align correctly on narrow screens and match the homepage header layout
+- Translation pages now resolve source links, content language, and SEO metadata consistently across every localized shell
+
 ## astro-theme-aither v2026.04.08
 
 ### Added

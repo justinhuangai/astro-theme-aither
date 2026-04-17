@@ -7,7 +7,13 @@ import { getPaginatedPosts } from '@/lib/site-content';
 export const getStaticPaths = createLocaleOnlyStaticPaths;
 
 const { locale } = Astro.props as { locale: Locale };
-const { posts, totalPages } = await getPaginatedPosts(locale, 1);
+const { posts, totalPages, allPosts } = await getPaginatedPosts(locale, 1);
 ---
 
-<BlogIndexPage locale={locale} currentPage={1} posts={posts} totalPages={totalPages} />
+<BlogIndexPage
+  locale={locale}
+  currentPage={1}
+  posts={posts}
+  totalPages={totalPages}
+  totalPostCount={allPosts.length}
+/>

@@ -27,11 +27,13 @@ const sectionNavItems = siteConfig.sections.map((s) => ({
   labelKey: s.labelKey,
   href: `/${s.id}`,
 }));
-// Insert section items before the last nav item (About)
+// Insert section items right after the primary reading entry (Blog)
+const primaryNavItem = siteConfig.nav.slice(0, 1);
+const trailingNavItems = siteConfig.nav.slice(1);
 const allNavItems = [
-  ...siteConfig.nav.slice(0, -1),
+  ...primaryNavItem,
   ...sectionNavItems,
-  ...siteConfig.nav.slice(-1),
+  ...trailingNavItems,
 ];
 ---
 

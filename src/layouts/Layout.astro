@@ -27,10 +27,12 @@ interface Props {
   description?: string;
   image?: string | ImageMetadata;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  canonicalUrl?: string;
   enableCrisp?: boolean;
   hideNavbar?: boolean;
   hideFooter?: boolean;
   hideLocaleBanner?: boolean;
+  hideLocaleAlternates?: boolean;
   hideThemeEffects?: boolean;
   bodyClass?: string;
   mainClass?: string;
@@ -59,10 +61,12 @@ const {
   description = siteConfig.description,
   image: imageProp,
   jsonLd,
+  canonicalUrl: canonicalUrlOverride,
   enableCrisp = true,
   hideNavbar = false,
   hideFooter = false,
   hideLocaleBanner = false,
+  hideLocaleAlternates = false,
   hideThemeEffects = false,
   bodyClass = '',
   mainClass = '',
@@ -210,13 +214,15 @@ const wechatShareImage =
 
 // Canonical URL
 const pathname = Astro.url.pathname;
-const canonicalUrl = new URL(pathname, siteConfig.url).href;
+const canonicalUrl = canonicalUrlOverride ?? new URL(pathname, siteConfig.url).href;
 
 const cleanPath = stripLocalePrefix(pathname);
-const alternateUrls = locales.map((l) => ({
-  hreflang: htmlLangs[l],
-  href: new URL(l === defaultLocale ? cleanPath : `/${l}${cleanPath}`, siteConfig.url).href,
-}));
+const alternateUrls = hideLocaleAlternates
+  ? []
+  : locales.map((l) => ({
+      hreflang: htmlLangs[l],
+      href: new URL(l === defaultLocale ? cleanPath : `/${l}${cleanPath}`, siteConfig.url).href,
+    }));
 
 ---
 
@@ -235,7 +241,9 @@ const alternateUrls = locales.map((l) => ({
     {alternateUrls.map(({ hreflang, href }) => (
       <link rel="alternate" hreflang={hreflang} href={href} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={new URL(cleanPath, siteConfig.url).href} />
+    {!hideLocaleAlternates && (
+      <link rel="alternate" hreflang="x-default" href={new URL(cleanPath, siteConfig.url).href} />
+    )}
     {alternateFormats?.map(({ type, href, title: t }) => (
       <link rel="alternate" type={type} href={href} title={t} />
     ))}
