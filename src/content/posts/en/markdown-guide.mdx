@@ -129,7 +129,7 @@ Inline `code` with backticks. Use inline code for function names like `getPublis
 
 Code block with syntax highlighting:
 
-```typescript
+```typescript showLanguage
 interface Post {
   title: string;
   date: Date;
@@ -145,7 +145,7 @@ function getPublishedPosts(posts: Post[]): Post[] {
 }
 ```
 
-```css
+```css showLanguage
 @theme {
   --font-sans: 'system-ui', sans-serif;
   --font-serif: 'ui-serif', 'Georgia', serif;
@@ -156,11 +156,11 @@ Code blocks now ship with line numbers by default, so longer examples are easier
 
 ### Code Block Tips
 
-Always specify the language identifier after the opening triple backticks. This enables syntax highlighting, which dramatically improves readability. Common identifiers include `typescript`, `javascript`, `css`, `html`, `bash`, `json`, `python`, and `markdown`.
+Always specify the language identifier after the opening triple backticks. This enables syntax highlighting, which dramatically improves readability. Common identifiers include `typescript`, `javascript`, `css`, `html`, `zsh`, `json`, `python`, and `markdown`.
 
-For shell commands, use `bash` or `sh`:
+For shell commands on macOS, use `zsh`:
 
-```bash
+```zsh
 # Install dependencies
 pnpm install
 
@@ -173,7 +173,7 @@ pnpm build
 
 For JSON configuration files:
 
-```json
+```json showLanguage
 {
   "name": "my-blog",
   "version": "1.0.0",

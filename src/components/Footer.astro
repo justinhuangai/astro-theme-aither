@@ -9,6 +9,7 @@ import {
   translateNav,
   type Locale,
 } from '@/i18n';
+import { isActiveNavPath } from '@/lib/navigation';
 
 interface Props {
   locale: Locale;
@@ -36,9 +37,9 @@ function isConfiguredSocialLink(link: SocialLink): boolean {
 
 function isActive(href: string): boolean {
   if (href.includes('#') || /^https?:\/\//.test(href)) return false;
-  const localizedHref = resolveInternalHref(href).replace(/\/$/, '') || '/';
-  const localizedCurrent = currentPath.replace(/\/$/, '') || '/';
-  return localizedCurrent === localizedHref;
+  return isActiveNavPath(currentPath, resolveInternalHref(href), {
+    descendants: href === '/' ? ['posts', 'page'] : [],
+  });
 }
 
 const footerSectionTitles = [m.footer.navigate, m.footer.subscribe, m.footer.source];

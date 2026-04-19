@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@aither/astro':
-        specifier: workspace:^2026.4.17
+        specifier: workspace:^2026.4.19
         version: link:packages/aither-astro
       '@astrojs/cloudflare':
         specifier: ^13.1.1
@@ -69,12 +69,18 @@ importers:
       '@astrojs/check':
         specifier: ^0.9.8
         version: 0.9.8(prettier@3.8.1)(typescript@5.9.3)
+      '@expressive-code/plugin-line-numbers':
+        specifier: ^0.41.7
+        version: 0.41.7
       '@types/react':
         specifier: ^19.1.6
         version: 19.2.14
       '@types/react-dom':
         specifier: ^19.1.6
         version: 19.2.3(@types/react@19.2.14)
+      astro-expressive-code:
+        specifier: ^0.41.7
+        version: 0.41.7(astro@6.0.4(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.31.1)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2))
       pagefind:
         specifier: ^1.4.0
         version: 1.4.0
@@ -108,6 +114,9 @@ importers:
       astro-expressive-code:
         specifier: ^0.41.7
         version: 0.41.7(astro@6.0.4(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.31.1)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2))
+      expressive-code:
+        specifier: ^0.41.7
+        version: 0.41.7
       playwright:
         specifier: ^1.58.2
         version: 1.58.2

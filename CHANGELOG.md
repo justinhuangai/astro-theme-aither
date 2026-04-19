@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [CalVer](https://calver.org/) versioning (`YYYY.0M.0D`).
 
+## astro-theme-aither v2026.04.19
+
+### Added
+- Shared navigation pathname helpers so desktop nav, mobile nav, and footer all resolve active routes from the same source of truth
+- A shared `@aither/astro/expressive-code-aither` plugin that maps code fence languages to human-readable labels and supports `showLanguage` / `languageLabel`
+- Root Expressive Code dependencies so line numbers and custom code-block plugins load reliably in local development, builds, and package smoke tests
+
+### Changed
+- Release version to `2026.04.19`
+- Public repository, homepage, and issue links now consistently point to `justinhuangai/astro-theme-aither`
+- Markdown guide examples now use explicit language headers where they improve clarity, and macOS shell snippets now use `zsh`
+
+### Fixed
+- Navbar, mobile navigation, and footer now share one active-path model, including descendant routes under the homepage reading surface
+- Fixed-content-locale section entries now canonicalize with a trailing slash, fixing `/translations/{slug}/` canonical URLs
+- Ordinary Expressive Code blocks now render visible language headers when authors opt in with `showLanguage`, instead of hiding badges inside collapsed headers
+
 ## astro-theme-aither v2026.04.17
 
 ### Added
